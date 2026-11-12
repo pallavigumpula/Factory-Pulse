@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-11-12T11:31:30.538367",
+  "overall_status": "PASSED",
+  "checks_run": 16,
+  "checks_passed": 16,
+  "checks_failed": 0,
+  "issues": [],
+  "entity_counts": {
+    "plants": 2,
+    "production_lines": 5,
+    "machines": 30,
+    "shifts": 6,
+    "shift_instances": 30,
+    "products": 21,
+    "downtime_reasons": 10,
+    "production_orders": 25,
+    "machine_state_events": 1565,
+    "production_counts": 2667,
+    "quality_inspections": 601
+  },
+  "summary": {
+    "checks_run": 16,
+    "checks_passed": 16,
+    "checks_failed": 0,
+    "pass_rate": "100.0%"
+  }
+}

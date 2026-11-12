@@ -1,0 +1,6 @@
+anomaly_id,anomaly_type,entity_id,timestamp,severity,description,expected_value,actual_value
+GT-0001,OVERLAPPING_MACHINE_EVENT,M-001,2026-01-02T10:00:00,HIGH,Machine M-001 has overlapping state intervals.,Non-overlapping intervals,Overlap detected at 10:00
+GT-0002,NEGATIVE_COUNT_WITHOUT_CORRECTION,PO-2026-000001,2026-01-02T12:00:00,CRITICAL,Production order PO-2026-000001 has negative count under non-correction type.,quantity >= 0,-45
+GT-0003,SCRAP_EXCEEDS_TOTAL_PRODUCTION,QC-2026-999903,2026-01-02T14:00:00,CRITICAL,Quality inspection QC-2026-999903 has failed count exceeding sample size.,failed_count <= sample_size (30),42
+GT-0004,INCORRECT_IDEAL_CYCLE_TIME,PROD-ANOM,2026-11-12T13:39:47.059107,HIGH,Product has invalid negative ideal cycle time.,ideal_cycle_time_seconds > 0,-5.0
+GT-0005,DOWNTIME_OVERLAPPING_PLANNED_BREAK,1,2026-01-01T11:45:00,MEDIUM,Equipment breakdown reported concurrently with statutory lunch break.,No overlapping unplanned downtime during BREAK,STOPPED state inside BREAK window

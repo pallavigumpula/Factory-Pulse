@@ -1,0 +1,52 @@
+[
+  {
+    "anomaly_id": "GT-0001",
+    "anomaly_type": "OVERLAPPING_MACHINE_EVENT",
+    "entity_id": "M-001",
+    "timestamp": "2026-01-02T10:00:00",
+    "severity": "HIGH",
+    "description": "Machine M-001 has overlapping state intervals.",
+    "expected_value": "Non-overlapping intervals",
+    "actual_value": "Overlap detected at 10:00"
+  },
+  {
+    "anomaly_id": "GT-0002",
+    "anomaly_type": "NEGATIVE_COUNT_WITHOUT_CORRECTION",
+    "entity_id": "PO-2026-000001",
+    "timestamp": "2026-01-02T12:00:00",
+    "severity": "CRITICAL",
+    "description": "Production order PO-2026-000001 has negative count under non-correction type.",
+    "expected_value": "quantity >= 0",
+    "actual_value": "-45"
+  },
+  {
+    "anomaly_id": "GT-0003",
+    "anomaly_type": "SCRAP_EXCEEDS_TOTAL_PRODUCTION",
+    "entity_id": "QC-2026-999903",
+    "timestamp": "2026-01-02T14:00:00",
+    "severity": "CRITICAL",
+    "description": "Quality inspection QC-2026-999903 has failed count exceeding sample size.",
+    "expected_value": "failed_count <= sample_size (30)",
+    "actual_value": "42"
+  },
+  {
+    "anomaly_id": "GT-0004",
+    "anomaly_type": "INCORRECT_IDEAL_CYCLE_TIME",
+    "entity_id": "PROD-ANOM",
+    "timestamp": "2026-11-12T13:39:47.059107",
+    "severity": "HIGH",
+    "description": "Product has invalid negative ideal cycle time.",
+    "expected_value": "ideal_cycle_time_seconds > 0",
+    "actual_value": "-5.0"
+  },
+  {
+    "anomaly_id": "GT-0005",
+    "anomaly_type": "DOWNTIME_OVERLAPPING_PLANNED_BREAK",
+    "entity_id": "1",
+    "timestamp": "2026-01-01T11:45:00",
+    "severity": "MEDIUM",
+    "description": "Equipment breakdown reported concurrently with statutory lunch break.",
+    "expected_value": "No overlapping unplanned downtime during BREAK",
+    "actual_value": "STOPPED state inside BREAK window"
+  }
+]

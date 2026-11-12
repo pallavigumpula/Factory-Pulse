@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FactoryPulse — Smart Manufacturing Performance & OEE Platform</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+    <!-- Authentication Modal / Overlay -->
+    <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+                <div class="modal-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <div class="brand-icon mx-auto mb-3" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <h4 class="fw-bold mb-1">FactoryPulse</h4>
+                        <p class="text-muted small">Smart Manufacturing Performance & OEE Platform</p>
+                    </div>
+                    
+                    <div id="login-error-alert" class="alert alert-danger py-2 small d-none" role="alert"></div>
+
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                <input type="text" id="login-username" class="form-control" placeholder="admin" value="admin" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                                <input type="password" id="login-password" class="form-control" placeholder="••••••••" value="admin123" required>
+                            </div>
+                            <div class="form-text small mt-1 text-muted">
+                                Demo accounts: <code>admin</code> (admin123), <code>operator1</code>, <code>maint1</code>, <code>qc1</code>, <code>planner1</code>
+                            </div>
+                        </div>
+                        <button type="submit" id="login-submit-btn" class="btn btn-primary w-100 py-2 fw-semibold">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Platform
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Sidebar -->
+    <aside id="sidebar">
+        <div class="brand-header">
+            <a href="#dashboard" class="brand-logo">
+                <div class="brand-icon"><i class="bi bi-cpu"></i></div>
+                <span>FactoryPulse</span>
+            </a>
+        </div>
+
+        <div class="py-2">
+            <div class="nav-section-title">Core Operations</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                        <i class="bi bi-speedometer2"></i> Main Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#monitoring" class="nav-link" data-page="monitoring">
+                        <i class="bi bi-grid-3x3-gap"></i> Machine Monitoring
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#oee" class="nav-link" data-page="oee">
+                        <i class="bi bi-graph-up-arrow"></i> OEE Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#anomalies" class="nav-link" data-page="anomalies">
+                        <i class="bi bi-exclamation-triangle"></i> Anomaly Detection
+                        <span id="sidebar-anomaly-count" class="badge bg-danger rounded-pill ms-auto small">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#assistant" class="nav-link" data-page="assistant">
+                        <i class="bi bi-robot"></i> AI Analytics Assistant
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-section-title">Production Execution</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="#orders" class="nav-link" data-page="orders">
+                        <i class="bi bi-clipboard-check"></i> Production Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#counts" class="nav-link" data-page="counts">
+                        <i class="bi bi-123"></i> Production Counts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#inspections" class="nav-link" data-page="inspections">
+                        <i class="bi bi-patch-check"></i> Quality Inspections
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#downtime" class="nav-link" data-page="downtime">
+                        <i class="bi bi-pause-circle"></i> Downtime Management
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#reports" class="nav-link" data-page="reports">
+                        <i class="bi bi-file-earmark-bar-graph"></i> Reports & Exports
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-section-title">Master Data</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="#plants" class="nav-link" data-page="plants">
+                        <i class="bi bi-building"></i> Plants
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#lines" class="nav-link" data-page="lines">
+                        <i class="bi bi-diagram-3"></i> Production Lines
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#machines" class="nav-link" data-page="machines">
+                        <i class="bi bi-tools"></i> Machines
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link" data-page="products">
+                        <i class="bi bi-box-seam"></i> Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#shifts" class="nav-link" data-page="shifts">
+                        <i class="bi bi-clock-history"></i> Shifts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#downtime-reasons" class="nav-link" data-page="downtime-reasons">
+                        <i class="bi bi-tag"></i> Downtime Reasons
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-section-title">Administration</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="#users" class="nav-link" data-page="users">
+                        <i class="bi bi-people"></i> User Management
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link" data-page="settings">
+                        <i class="bi bi-gear"></i> System & Database
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div id="main-wrapper">
+        <!-- Topbar -->
+        <header id="topbar">
+            <div class="topbar-left">
+                <button class="btn btn-sm btn-light d-lg-none me-2" id="sidebar-toggle-btn">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h1 class="page-title" id="current-page-title">Main Dashboard</h1>
+            </div>
+
+            <div class="topbar-right">
+                <!-- Database indicator -->
+                <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2 small d-none d-md-inline-block">
+                    <i class="bi bi-database me-1"></i> factorypulse_db
+                </span>
+
+                <!-- User profile badge -->
+                <div class="user-badge">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-sm-block">
+                        <div class="fw-bold" style="font-size: 0.82rem;" id="topbar-user-name">Administrator</div>
+                        <div class="badge bg-primary text-white" style="font-size: 0.65rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </div>
+
+                <!-- Logout Button -->
+                <button class="btn btn-outline-secondary btn-sm" id="logout-btn" title="Sign Out">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Page View Container -->
+        <main id="app-view">
+            <!-- Dynamic view injected here by router -->
+        </main>
+    </div>
+
+    <!-- Generic Modal for CRUD / Actions -->
+    <div class="modal fade" id="genericModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px;">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold" id="genericModalTitle">Edit Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="genericModalBody">
+                    <!-- Form injected dynamically -->
+                </div>
+                <div class="modal-footer border-top" id="genericModalFooter">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="genericModalSubmit">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 3000;">
+        <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-message">Action successful.</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Application JavaScript Modules -->
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/charts.js"></script>
+    <script src="/static/js/pages/dashboard.js"></script>
+    <script src="/static/js/pages/monitoring.js"></script>
+    <script src="/static/js/pages/oee.js"></script>
+    <script src="/static/js/pages/anomalies.js"></script>
+    <script src="/static/js/pages/production.js"></script>
+    <script src="/static/js/pages/master_data.js"></script>
+    <script src="/static/js/pages/reports.js"></script>
+    <script src="/static/js/pages/users.js"></script>
+    <script src="/static/js/pages/assistant.js"></script>
+    <script src="/static/js/pages/settings.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
